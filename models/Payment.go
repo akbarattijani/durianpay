@@ -1,11 +1,14 @@
 package models
 
-import "time"
+import (
+	"Durianpay/constrains"
+	"time"
+)
 
 type Payment struct {
-	ID        string    `json:"id"`
-	Amount    int       `json:"amount"`
-	Status    string    `json:"status"` // completed, processing, failed
-	Reviewed  bool      `json:"reviewed"`
-	CreatedAt time.Time `json:"created_at"`
+	ID        string                   `json:"id"`
+	Amount    int                      `json:"amount"`
+	Status    constrains.PaymentStatus `json:"status"` // completed, processing, failed
+	Reviewed  bool                     `json:"reviewed"`
+	CreatedAt time.Time                `json:"created_at"`
 }
