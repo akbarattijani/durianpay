@@ -1,0 +1,130 @@
+openapi: 3.0.0
+info:
+  title: Durianpay Dashboard API
+  version: 1.0.0
+  description: API for dashboard Durianpay, included Authentication, Role,  List Payments with more query params, and Payment Review.
+
+servers:
+  - url: http://localhost:8080/dashboard/v1
+    description: Local server
+
+paths:
+  /auth/login:
+    post:
+      summary: Authentication user
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+                - email
+                - password
+      responses:
+        '200':
+          description: Login success with response JWT Token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                  role:
+                    type: string
+        '401':
+          description: Unauthorized
+
+  /payments:
+    get:
+      summary: List Payment
+      tags:
+        - Payments
+      parameters:
+        - in: query
+          name: sort
+          schema:
+            type: string
+            enum: [amount_asc, amount_desc, id_asc, id_desc]
+          description: Parameter for sorting payments
+        - in: query
+          name: page
+          schema:
+            type: integer
+          description: Parameter for pagination (max 10 data per page)
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: List Payment
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    ID:
+                      type: string
+                    Amount:
+                      type: number
+                    CreatedAt:
+                      type: string
+                      format: date-time
+                    Status:
+                      type: string
+                    Reviewed:
+                      type: boolean
+        '401':
+          description: Unauthorized
+
+  /payment/{id}/review:
+    post:
+      summary: Payment Review
+      tags:
+        - Payments
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Payment ID
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Review success
+        '403':
+          description: Forbidden, Operation Role required
+        '401':
+          description: Unauthorized
+
+  /:
+    get:
+      summary: Health check
+      tags:
+        - Health
+      responses:
+        '200':
+          description: Server OK
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: ok
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

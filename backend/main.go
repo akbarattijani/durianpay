@@ -4,7 +4,6 @@ import (
 	"Durianpay/handlers"
 	"Durianpay/services"
 	"Durianpay/util"
-	"Durianpay/util/authentication"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -23,8 +22,8 @@ func main() {
 	v1.POST("/auth/login", handlers.AuthHandler)
 
 	// protected group
-	v1.GET("/payments", handlers.ListPaymentHandler(payments), authentication.AuthMiddleware)
-	v1.POST("/payment/:id/review", handlers.ReviewPaymentHandler(payments), authentication.AuthMiddleware, authentication.CheckRole)
+	v1.GET("/payments", handlers.ListPaymentHandler(payments), services.AuthMiddleware)
+	v1.POST("/payment/:id/review", handlers.ReviewPaymentHandler(payments), services.AuthMiddleware, services.CheckRole)
 
 	// health
 	e.GET("/", func(c echo.Context) error { return c.String(http.StatusOK, "ok") })

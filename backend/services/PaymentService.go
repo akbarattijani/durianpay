@@ -5,6 +5,9 @@ import (
 	"Durianpay/util"
 	"encoding/json"
 	"errors"
+	"sort"
+	"strconv"
+	"strings"
 	"sync"
 )
 
@@ -74,4 +77,55 @@ func (s *PaymentData) MarkReviewed(id string) error {
 
 	p.Reviewed = true
 	return nil
+}
+
+func PaymentSorting(sortingParam string, payments []*models.Payment) {
+	switch sortingParam {
+	case "amount_asc":
+		sort.Slice(payments, func(i, j int) bool { return payments[i].Amount < payments[j].Amount })
+	case "amount_desc":
+		sort.Slice(payments, func(i, j int) bool { return payments[i].Amount > payments[j].Amount })
+	case "id_asc":
+		sort.Slice(payments, func(i, j int) bool {
+			idI, _ := strconv.Atoi(strings.TrimPrefix(payments[i].ID, "pd"))
+			idJ, _ := strconv.Atoi(strings.TrimPrefix(payments[j].ID, "pd"))
+			return idI < idJ
+		})
+	case "id_desc":
+		sort.Slice(payments, func(i, j int) bool {
+			idI, _ := strconv.Atoi(strings.TrimPrefix(payments[i].ID, "pd"))
+			idJ, _ := strconv.Atoi(strings.TrimPrefix(payments[j].ID, "pd"))
+			return idI > idJ
+		})
+	default: // date_desc
+		sort.Slice(payments, func(i, j int) bool { return payments[i].CreatedAt.After(payments[j].CreatedAt) })
+	}
+}
+
+func PaymentPagination(page int, payments []*models.Payment) []*models.Payment {
+	if page < 1 {
+		page = 1
+	}
+
+	start := (page - 1) * 10
+	end := start + 10
+	if start >= len(payments) {
+		return []*models.Payment{}
+	}
+	if end > len(payments) {
+		end = len(payments)
+	}
+
+	return payments[start:end]
+}
+
+func PaymentsFiltered(status string, payments []*models.Payment) []*models.Payment {
+	filtered := []*models.Payment{}
+	for _, payment := range payments {
+		if string(payment.Status) == status {
+			filtered = append(filtered, payment)
+		}
+	}
+
+	return filtered
 }

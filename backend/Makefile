@@ -11,10 +11,8 @@ run-dev:
 	go run $(MAIN_FILE)
 
 test:
-	go test ./...
+	APP_ENV=test go test ./tests/...
 
-fmt:
-	go fmt ./...
 
 clean:
 	rm -f $(BINARY_NAME)

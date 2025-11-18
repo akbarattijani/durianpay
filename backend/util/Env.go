@@ -17,3 +17,10 @@ func LoadEnv() {
 func GetEnv(key string) string {
 	return os.Getenv(key)
 }
+
+func LoadEnvForTest() {
+	err := godotenv.Load(".env.test")
+	if err != nil {
+		log.Println("WARNING: .env.test not found, using default values")
+	}
+}

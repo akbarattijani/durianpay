@@ -65,6 +65,16 @@ func fetchRemoteConfig(projectID string) (map[string]interface{}, error) {
 
 // GetRemoteValue returns a specific RC parameter value
 func GetRemoteValue(key string) (string, error) {
+	if os.Getenv("APP_ENV") == "test" {
+		mockValues := map[string]string{
+			"JWT_SECRET_KEY":         "TESTSECRET123",
+			"PAYMENT_DATA_HARDCODED": "[]",
+		}
+		if val, ok := mockValues[key]; ok {
+			return val, nil
+		}
+	}
+	
 	projectId := GetEnv("FIREBASE_PROJECT_ID")
 	config, err := fetchRemoteConfig(projectId)
 	if err != nil {

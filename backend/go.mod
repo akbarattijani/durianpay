@@ -5,11 +5,9 @@ go 1.24.0
 toolchain go1.24.5
 
 require (
-	firebase.google.com/go v3.13.0+incompatible
 	github.com/golang-jwt/jwt/v5 v5.3.0
 	github.com/joho/godotenv v1.5.1
 	github.com/labstack/echo/v4 v4.13.4
-	google.golang.org/api v0.256.0
 )
 
 require (
