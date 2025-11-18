@@ -1,11 +1,11 @@
 package services
 
 import (
-	"Durianpay/constrains"
 	"Durianpay/models"
+	"Durianpay/util"
+	"encoding/json"
 	"errors"
 	"sync"
-	"time"
 )
 
 var (
@@ -21,17 +21,20 @@ type PaymentData struct {
 func NewPayment() *PaymentData {
 	// create array variable
 	paymentData := &PaymentData{payments: map[string]*models.Payment{}}
+	paymentJson, err := util.GetRemoteValue("PAYMENT_DATA_HARDCODED")
+	if err != nil {
+		panic(err)
+	}
 
-	// add hardcoded data
-	now := time.Now()
-	paymentData.payments["pd1"] = &models.Payment{ID: "pd1", Amount: 1455003, Status: constrains.PaymentCompleted, Reviewed: false, CreatedAt: now.Add(-10 * time.Hour)}
-	paymentData.payments["pd2"] = &models.Payment{ID: "pd2", Amount: 786000, Status: constrains.PaymentProcessing, Reviewed: false, CreatedAt: now.Add(-20 * time.Hour)}
-	paymentData.payments["pd3"] = &models.Payment{ID: "pd3", Amount: 6744500, Status: constrains.PaymentFailed, Reviewed: false, CreatedAt: now.Add(-30 * time.Hour)}
-	paymentData.payments["pd4"] = &models.Payment{ID: "pd4", Amount: 12743000, Status: constrains.PaymentCompleted, Reviewed: true, CreatedAt: now.Add(-40 * time.Hour)}
-	paymentData.payments["pd5"] = &models.Payment{ID: "pd5", Amount: 12743000, Status: constrains.PaymentCompleted, Reviewed: true, CreatedAt: now.Add(-50 * time.Hour)}
-	paymentData.payments["pd6"] = &models.Payment{ID: "pd6", Amount: 786000, Status: constrains.PaymentProcessing, Reviewed: false, CreatedAt: now.Add(-60 * time.Hour)}
-	paymentData.payments["pd7"] = &models.Payment{ID: "pd7", Amount: 786000, Status: constrains.PaymentProcessing, Reviewed: false, CreatedAt: now.Add(-70 * time.Hour)}
-	paymentData.payments["pd8"] = &models.Payment{ID: "pd8", Amount: 6744500, Status: constrains.PaymentFailed, Reviewed: false, CreatedAt: now.Add(-80 * time.Hour)}
+	var list []models.Payment
+	if err := json.Unmarshal([]byte(paymentJson), &list); err != nil {
+		return paymentData
+	}
+
+	for _, p := range list {
+		cp := p
+		paymentData.payments[p.ID] = &cp
+	}
 
 	return paymentData
 }
