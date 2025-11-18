@@ -32,13 +32,14 @@ func ListPaymentHandler(paymentData *services.PaymentData) echo.HandlerFunc {
 	}
 }
 
-func ReviewPaymentHandler(store *services.PaymentData) echo.HandlerFunc {
+func ReviewPaymentHandler(paymentData *services.PaymentData) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		id := c.Param("id")
 		if id == "" {
 			return c.JSON(http.StatusBadRequest, map[string]string{"error": "missing id"})
 		}
-		if err := store.MarkReviewed(id); err != nil {
+
+		if err := paymentData.MarkReviewed(id); err != nil {
 			return c.JSON(http.StatusNotFound, map[string]string{"error": "payment not found"})
 		}
 

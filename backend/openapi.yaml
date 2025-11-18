@@ -87,7 +87,7 @@ paths:
           description: Unauthorized
 
   /payment/{id}/review:
-    post:
+    patch:
       summary: Payment Review
       tags:
         - Payments

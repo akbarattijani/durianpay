@@ -18,12 +18,12 @@ var (
 // PaymentData model for store all payment data hardcoded
 type PaymentData struct {
 	mu       sync.RWMutex
-	payments map[string]*models.Payment
+	Payments map[string]*models.Payment
 }
 
 func NewPayment() *PaymentData {
 	// create array variable
-	paymentData := &PaymentData{payments: map[string]*models.Payment{}}
+	paymentData := &PaymentData{Payments: map[string]*models.Payment{}}
 	paymentJson, err := util.GetRemoteValue("PAYMENT_DATA_HARDCODED")
 	if err != nil {
 		panic(err)
@@ -36,7 +36,7 @@ func NewPayment() *PaymentData {
 
 	for _, p := range list {
 		cp := p
-		paymentData.payments[p.ID] = &cp
+		paymentData.Payments[p.ID] = &cp
 	}
 
 	return paymentData
@@ -46,8 +46,8 @@ func (s *PaymentData) ListPayments() []*models.Payment {
 	s.mu.RLock()
 	defer s.mu.RUnlock()
 
-	res := make([]*models.Payment, 0, len(s.payments))
-	for _, p := range s.payments {
+	res := make([]*models.Payment, 0, len(s.Payments))
+	for _, p := range s.Payments {
 		res = append(res, p)
 	}
 
@@ -58,7 +58,7 @@ func (s *PaymentData) GetPayment(id string) (*models.Payment, error) {
 	s.mu.RLock()
 	defer s.mu.RUnlock()
 
-	p, ok := s.payments[id]
+	p, ok := s.Payments[id]
 	if !ok {
 		return nil, ErrNotFound
 	}
@@ -70,7 +70,7 @@ func (s *PaymentData) MarkReviewed(id string) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
-	p, ok := s.payments[id]
+	p, ok := s.Payments[id]
 	if !ok {
 		return ErrNotFound
 	}
