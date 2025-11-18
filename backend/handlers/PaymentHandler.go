@@ -5,6 +5,7 @@ import (
 	"Durianpay/services"
 	"github.com/labstack/echo/v4"
 	"net/http"
+	"sort"
 	"strconv"
 )
 
@@ -23,6 +24,17 @@ func ListPaymentHandler(paymentData *services.PaymentData) echo.HandlerFunc {
 			}
 
 			payments = filtered
+		}
+
+		// sorting
+		sortParam := c.QueryParam("sort")
+		switch sortParam {
+		case "amount_asc":
+			sort.Slice(payments, func(i, j int) bool { return payments[i].Amount < payments[j].Amount })
+		case "amount_desc":
+			sort.Slice(payments, func(i, j int) bool { return payments[i].Amount > payments[j].Amount })
+		default: // date_desc
+			sort.Slice(payments, func(i, j int) bool { return payments[i].CreatedAt.After(payments[j].CreatedAt) })
 		}
 
 		// pagination
