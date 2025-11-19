@@ -32,6 +32,22 @@ func ListPaymentHandler(paymentData *services.PaymentData) echo.HandlerFunc {
 	}
 }
 
+func GetTotalPaymentsHandler(paymentData *services.PaymentData) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		payments := paymentData.ListPayments()
+
+		// filter status
+		status := c.QueryParam("status")
+		if status != "" {
+			payments = services.PaymentsFiltered(status, payments)
+		}
+		
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"count": len(payments),
+		})
+	}
+}
+
 func ReviewPaymentHandler(paymentData *services.PaymentData) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		id := c.Param("id")

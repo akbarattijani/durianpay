@@ -23,7 +23,8 @@ func RegisterRoutes(e *echo.Echo) *echo.Echo {
 
 	// protected group
 	v1.GET("/payments", handlers.ListPaymentHandler(payments), services.AuthMiddleware)
-	v1.PATCH("/payment/:id/review", handlers.ReviewPaymentHandler(payments), services.AuthMiddleware, services.CheckRole)
+	v1.GET("/payments/size", handlers.GetTotalPaymentsHandler(payments), services.AuthMiddleware)
+	v1.PUT("/payment/:id/review", handlers.ReviewPaymentHandler(payments), services.AuthMiddleware, services.CheckRole)
 
 	// health
 	e.GET("/", func(c echo.Context) error { return c.String(http.StatusOK, "ok") })

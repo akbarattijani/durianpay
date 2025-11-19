@@ -51,7 +51,7 @@ func TestMainFunctionalOperationRole(t *testing.T) {
 	}
 
 	// Payment Review Test
-	requestReview, _ := http.NewRequest(http.MethodPatch, httpTest.URL+"/dashboard/v1/payment/pd1/review", nil)
+	requestReview, _ := http.NewRequest(http.MethodPut, httpTest.URL+"/dashboard/v1/payment/pd1/review", nil)
 	requestReview.Header.Set("Authorization", "Bearer "+token)
 	responseReview, err := http.DefaultClient.Do(requestReview)
 
@@ -102,7 +102,7 @@ func TestMainFunctionalCsRole(t *testing.T) {
 	}
 
 	// Payment Review Test (Forbidden because is not Operation Role)
-	requestReview, _ := http.NewRequest(http.MethodPatch, httpTest.URL+"/dashboard/v1/payment/pd1/review", nil)
+	requestReview, _ := http.NewRequest(http.MethodPut, httpTest.URL+"/dashboard/v1/payment/pd1/review", nil)
 	requestReview.Header.Set("Authorization", "Bearer "+token)
 	responseReview, err := http.DefaultClient.Do(requestReview)
 
