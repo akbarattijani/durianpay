@@ -80,6 +80,8 @@ paths:
                   properties:
                     id:
                       type: string
+                    name:
+                      type: string
                     amount:
                       type: number
                     created_at:

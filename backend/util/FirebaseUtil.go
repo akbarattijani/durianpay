@@ -68,7 +68,7 @@ func GetRemoteValue(key string) (string, error) {
 	if os.Getenv("APP_ENV") == "test" {
 		mockValues := map[string]string{
 			"JWT_SECRET_KEY":         "TESTSECRET123",
-			"PAYMENT_DATA_HARDCODED": "[{\"id\":\"pd1\",\"amount\":1455003,\"status\":\"completed\",\"reviewed\":false,\"created_at\":\"2025-01-01T10:00:00Z\"},{\"id\":\"pd2\",\"amount\":786000,\"status\":\"processing\",\"reviewed\":false,\"created_at\":\"2025-01-02T09:00:00Z\"},{\"id\":\"pd3\",\"amount\":6744500,\"status\":\"failed\",\"reviewed\":false,\"created_at\":\"2025-01-03T08:00:00Z\"},{\"id\":\"pd4\",\"amount\":12743000,\"status\":\"completed\",\"reviewed\":true,\"created_at\":\"2025-01-04T07:00:00Z\"},{\"id\":\"pd5\",\"amount\":932000,\"status\":\"processing\",\"reviewed\":false,\"created_at\":\"2025-01-05T06:00:00Z\"}]",
+			"PAYMENT_DATA_HARDCODED": "[{\"id\":\"pd1\",\"name\":\"Toko Sakura\",\"amount\":1455003,\"status\":\"completed\",\"reviewed\":false,\"created_at\":\"2025-01-01T10:00:00Z\"},{\"id\":\"pd2\",\"name\":\"Bakery Joy\",\"amount\":786000,\"status\":\"processing\",\"reviewed\":false,\"created_at\":\"2025-01-02T09:00:00Z\"},{\"id\":\"pd3\",\"name\":\"Cafe Aroma\",\"amount\":6744500,\"status\":\"failed\",\"reviewed\":false,\"created_at\":\"2025-01-03T08:00:00Z\"},{\"id\":\"pd4\",\"name\":\"Mart Sejahtera\",\"amount\":12743000,\"status\":\"completed\",\"reviewed\":true,\"created_at\":\"2025-01-04T07:00:00Z\"},{\"id\":\"pd5\",\"name\":\"Resto Lima\",\"amount\":932000,\"status\":\"processing\",\"reviewed\":false,\"created_at\":\"2025-01-05T06:00:00Z\"},{\"id\":\"pd6\",\"name\":\"Toko Serba Ada\",\"amount\":456700,\"status\":\"completed\",\"reviewed\":false,\"created_at\":\"2025-01-06T12:00:00Z\"}]",
 		}
 		if val, ok := mockValues[key]; ok {
 			return val, nil
