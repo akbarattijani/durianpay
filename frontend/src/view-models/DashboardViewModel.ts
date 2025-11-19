@@ -1,6 +1,6 @@
 import type { Payment } from "../models/Payment";
 import { defineStore } from "pinia";
-import { listPaymentService, paymentReviewService } from "../services/PaymentService";
+import { listPaymentService, paymentReviewService, getTotalPaymentService } from "../services/PaymentService";
 import axios from "axios";
 
 interface PaymentState {
@@ -11,10 +11,13 @@ interface PaymentState {
     search: string;
     role: string;
     loading: boolean;
-    error: string
+    error: string,
+    itemsPerPage: number;
+    totalCount: number,
+    totalPages: number,
 }
 
-export const useDasboardViewModel = defineStore("loginStore", {
+export const useDasboardViewModel = defineStore("dashboardStore", {
     state: (): PaymentState => ({
         payments: [],
         page: null,
@@ -23,9 +26,49 @@ export const useDasboardViewModel = defineStore("loginStore", {
         sort: null,
         status: null,
         search: "",
-        role: null
+        role: null,
+        itemsPerPage: 10,
+        totalCount: 0,
+        totalPages: 1,
     }),
+    getters: {
+        filteredPayments: (state) => {
+            let list = state.payments;
+
+            // filter by status
+            if (state.status) {
+                list = list.filter(p => p.status.toLowerCase() === state.status.toLowerCase());
+            }
+
+            // filter by search
+            if (state.search.trim() !== "") {
+                const term = state.search.toLowerCase();
+                list = list.filter(
+                    p => (p.id + "").toLowerCase().includes(term) || (p.name + "").toLowerCase().includes(term)
+                );
+            }
+
+            return list;
+        },
+        totalPagesArray: (state): number[] => {
+            const total = state.totalPages || 1;
+            return Array.from({ length: total }, (_, i) => i + 1);
+        }
+    },
     actions: {
+        async fetchTotalCount() {
+            this.loading = true;
+            try {
+                const count = await getTotalPaymentService(this.status);
+                this.totalCount = count;
+                this.totalPages = Math.ceil(count / this.itemsPerPage) || 1;
+                console.log("totalPage -> " + this.totalPage);
+            } catch (err) {
+                this.error = "Failed to get total payments count";
+            } finally {
+                this.loading = false;
+            }
+        },
         async handleListPayment() {
             this.loading = true;
             this.error = "";
@@ -53,16 +96,16 @@ export const useDasboardViewModel = defineStore("loginStore", {
         },
 
         async handlePaymentReview(item: Payment) {
-            item.loading = true;
+            const payment = this.payments.find(p => p.id === item.id);
+            if (!payment) return;
+        
+            payment.loading = true;
             this.error = "";
         
             try {
-                const data = await paymentReviewService(item.id);
-                if (data < 300) {
-                    const item = this.payments.find(payment => payment.id === item.id);
-                    if (item) {
-                        item.reviewed = true;
-                    }
+                const status = await paymentReviewService(payment.id);
+                if (status < 300) {
+                    payment.reviewed = true;
                 } else {
                     this.error = "Review payment failed, try again...";
                 }
@@ -73,13 +116,27 @@ export const useDasboardViewModel = defineStore("loginStore", {
                     this.error = "Unexpected error";
                 }
             } finally {
-                item.loading = false;
+                payment.loading = false;
             }
+        },
+
+        logout() {
+            localStorage.removeItem("AUTH_TOKEN");
+            localStorage.removeItem("DURIAN_ROLE");
+        },
+
+        goToPage(page: number) {
+            this.page = page;
+            this.handleListPayment();
         }
     }
 });
 
-export default function checkAuthentication(): boolean {
+export function checkAuthentication(): boolean {
     const token = localStorage.getItem("AUTH_TOKEN");
-    return token !== null && token !== undefined && token !== "";
+    return !!token;
+}
+
+export function getRole(): string {
+    return localStorage.getItem("DURIAN_ROLE") || "";
 }

@@ -22,14 +22,32 @@ export async function listPaymentService({page = 1, sort = null, status = null})
 }
 
 export async function paymentReviewService(id: string): Promise<number> {
-    const res = await axios.patch(`http://localhost:8080/dashboard/v1/payment/${id}/review`, {
+    const res = await axios.put(
+        `http://localhost:8080/dashboard/v1/payment/${id}/review`,
+        {},
+        {
+            headers: {
+                Authorization: `Bearer ${getAuthenticationToken()}`,
+                "Content-Type": "application/json",
+            },
+        }
+    );
+
+    return res.status;
+}
+
+export async function getTotalPaymentService(status: string): Promise<number> {
+    const res = await axios.get("http://localhost:8080/dashboard/v1/payments/size", {
+        params: {
+            status: status || undefined
+        },
         headers: {
             Authorization: `Bearer ${getAuthenticationToken()}`,
             "Content-Type": "application/json",
         }
     });
 
-    return res.status;
+    return res.data.count;
 }
 
 export function getAuthenticationToken(): string {

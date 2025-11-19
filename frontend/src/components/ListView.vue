@@ -7,7 +7,12 @@
         :class="{ disabled: item.status !== 'Live' }"
       >
         <div class="left-section">
-          <div class="label">Payment ID : {{ item.id }}</div>
+          <div class="name-card">
+            {{ item.name }}  
+            <div class="label">
+              {{ "(ID : " + item.id + ")" }}
+            </div>
+          </div>
           <div class="amount">IDR {{ formatAmount(item.amount) }}</div>
           <span class="created">Created: {{ formatDate(item.created_at) }}</span>
         </div>
@@ -24,9 +29,10 @@
           <button 
             v-else-if="role === 'operation'"
             class="button"
+            :disabled="item.loading"
             @click="emit('review', item)"
           >
-            {{ item.loading ? 'Loading...' : 'Review' }}
+            {{ item.loading ? 'Loading...' : 'Mark as Reviewed' }}
           </button>
         </div>
       </div>
@@ -69,18 +75,21 @@
     height: calc(100vh);
     overflow-y: auto;
     padding-right: 4px;
+    padding-top: 16px;
+    padding-bottom: 16px;
   }
 
   .branch-card {
-    width: 80%;
-    box-sizing: border-box;
-    display: flex;
-    justify-content: space-between;
-    padding: 16px;
-    border-radius: 12px;
-    background: white;
-    border: 1px solid #e2e2e2;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+      width: 100%;
+      max-width: 80vw;
+      box-sizing: border-box;
+      display: flex;
+      justify-content: space-between;
+      padding: 16px;
+      border-radius: 12px;
+      background: white;
+      border: 1px solid #e2e2e2;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.06);
   }
 
   .branch-card.disabled {
@@ -108,6 +117,7 @@
     background: #d4f8d4;
     color: #0a7d0a;
     font-weight: bold;
+    width: fit-content;
   }
 
   .status.completed {
@@ -129,6 +139,7 @@
     display: flex;
     flex-direction: column;
     text-align: right;
+    align-items: flex-end;
   }
 
   .label {
@@ -175,5 +186,14 @@
   button:disabled {
     opacity: 0.6;
     cursor: not-allowed;
+  }
+
+  .name-card {
+    display: flex;
+    flex-direction: row;
+    font-size: 14px;
+    font-weight: bold;
+    color: black;
+    gap: 4px;
   }
 </style>
