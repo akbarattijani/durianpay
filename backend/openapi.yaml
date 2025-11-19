@@ -56,6 +56,12 @@ paths:
             enum: [amount_asc, amount_desc, id_asc, id_desc]
           description: Parameter for sorting payments
         - in: query
+          name: status
+          schema:
+            type: string
+            enum: [ failed, completed, processing ]
+          description: Parameter for status payments
+        - in: query
           name: page
           schema:
             type: integer
@@ -72,16 +78,16 @@ paths:
                 items:
                   type: object
                   properties:
-                    ID:
+                    id:
                       type: string
-                    Amount:
+                    amount:
                       type: number
-                    CreatedAt:
+                    created_at:
                       type: string
                       format: date-time
-                    Status:
+                    status:
                       type: string
-                    Reviewed:
+                    reviewed:
                       type: boolean
         '401':
           description: Unauthorized
