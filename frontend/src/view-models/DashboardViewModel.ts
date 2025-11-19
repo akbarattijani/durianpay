@@ -62,8 +62,7 @@ export const useDasboardViewModel = defineStore("dashboardStore", {
                 const count = await getTotalPaymentService(this.status);
                 this.totalCount = count;
                 this.totalPages = Math.ceil(count / this.itemsPerPage) || 1;
-                console.log("totalPage -> " + this.totalPage);
-            } catch (err) {
+            } catch {
                 this.error = "Failed to get total payments count";
             } finally {
                 this.loading = false;

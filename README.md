@@ -26,9 +26,10 @@
 
 - **Install Swagger UI use Docker & Running Swagger (OpenAPI 3.0.0)**
   - Documentation for all API
-    1. open target directory to **/backend**
-    2. docker run -p 8080:8080 -e SWAGGER_JSON=/swagger/openapi.yaml -v $(pwd)/openapi.yaml:/swagger/openapi.yaml swaggerapi/swagger-ui
-    3. open http://localhost:8080/ on browser
+    1. install docker & open docker
+    2. open target directory to **/backend** on Terminal
+    3. docker run -p 8080:8080 -e SWAGGER_JSON=/swagger/openapi.yaml -v $(pwd)/openapi.yaml:/swagger/openapi.yaml swaggerapi/swagger-ui
+    4. open http://localhost:8080/ on browser
 
 
 - **Makefile Command**
@@ -39,14 +40,68 @@
   5. **make test** : for running all tests
 
 
+- **Step Running Server**
+    1. open target directory to **/backend** on Terminal
+    2. run **make build**
+    3. run **make run**
+
+
 - **Credentials**
   1. Firebase Remote Config
      1. **JWT_SECRET_KEY** : jwt secret key store in firebase
      2. **PAYMENT_DATA_HARDCODED** : for provide all data payment hardcoded in json format
   2. Authentication User 
      1. CS Role
-        - email : cs@durian.money
-        - password : cs123
+        - email : **cs@durian.money**
+        - password : **cs123**
      2. Operation
-        - email : op@durian.money
-        - password : op123
+        - email : **op@durian.money**
+        - password : **op123**
+
+**FRONTEND (Vue 3.5.22)**
+
+***Project Structure Design***
+- Design Pattern using **MVVM**
+
+  1. **/src/assets** : all file for assets like image
+  2. **/src/components** : all file spesific components store in this
+  3. **/src/models** : all file for view data model store in this
+  4. **/src/services** : all file for get data from API
+  5. **/src/view-models** : all file for ViewModel
+     1. access services
+     2. Bussines Logic
+  6. **/src/view** : all file for View (UI)
+      1. access ViewModel for get data and watch state
+      2. UI page design
+  7. **/test** : all file for test, store in this
+
+
+- **Depedencies**
+    1. **Axios** : for API request
+    2. **Pinia** : for State Management
+    3. **Vue-Router** : for navigate page
+
+
+- **Makefile Command**
+    1. **make build** : for build project
+    3. **make run** : for running website
+    4. **make run dev** : for run webiste with development type
+    5. **make test** : for running all tests
+    6. **make install** : for install all depedencies
+    7. **make lint** : running Linter
+
+
+- **Step Running Website**
+    1. open target directory to **/frontend** on Terminal
+    2. run **make install**
+    3. run **make run dev**
+
+
+- **Credentials**
+    1. Authentication User
+        1. CS Role
+            - email : **cs@durian.money**
+            - password : **cs123**
+        2. Operation
+            - email : **op@durian.money**
+            - password : **op123**
