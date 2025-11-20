@@ -1,6 +1,6 @@
 **BACKEND (Go 1.24.0)**
 =====================
-Recommencation running all command Terminal use **GoLand IDE**
+Recommendation running all command Terminal use **GoLand IDE**
 
 
 ***Project Structure Design***
@@ -64,7 +64,7 @@ Recommencation running all command Terminal use **GoLand IDE**
 
 **FRONTEND (Vue 3.5.22)**
 =====================
-Recommencation running all command Terminal use **VS Code**
+Recommendation running all command Terminal use **VS Code**
 
 ***Project Structure Design***
 - Design Pattern using **MVVM**
