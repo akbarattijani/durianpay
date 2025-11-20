@@ -19,6 +19,7 @@ func RegisterRoutes(e *echo.Echo) *echo.Echo {
 	}))
 
 	v1 := e.Group("/dashboard/v1")
+	e.Logger.Fatal(e.Start(":8080"))
 	v1.POST("/auth/login", handlers.AuthHandler)
 
 	// protected group

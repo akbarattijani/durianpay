@@ -1,4 +1,7 @@
 **BACKEND (Go 1.24.0)**
+=====================
+Recommencation running all command Terminal use **GoLand IDE**
+
 
 ***Project Structure Design***
   1. **/constrains** : all variable and enum file store in this
@@ -41,9 +44,10 @@
 
 
 - **Step Running Server**
-    1. open target directory to **/backend** on Terminal
-    2. run **make build**
-    3. run **make run**
+    1. make sure port 8080 dont use
+    2. open target directory to **/backend** on Terminal
+    3. run **make build**
+    4. run **make run**
 
 
 - **Credentials**
@@ -59,6 +63,8 @@
         - password : **op123**
 
 **FRONTEND (Vue 3.5.22)**
+=====================
+Recommencation running all command Terminal use **VS Code**
 
 ***Project Structure Design***
 - Design Pattern using **MVVM**
@@ -92,9 +98,16 @@
 
 
 - **Step Running Website**
-    1. open target directory to **/frontend** on Terminal
-    2. run **make install**
-    3. run **make run dev**
+    1. make sure url http://localhost:8080/ is running with this API Go
+    2. open target directory to **/frontend** on Terminal
+    3. run **make install**
+    4. run **make run dev**
+
+
+- **Free port 8080**
+  1. open Terminal
+  2. lsof -i :8080
+  3. kill <PID>
 
 
 - **Credentials**
