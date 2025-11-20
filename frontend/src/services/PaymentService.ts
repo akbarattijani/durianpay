@@ -1,5 +1,6 @@
 import axios from "axios";
 import type { Payment } from "../models/Payment";
+import { PaymentCount } from "../models/PaymentCount";
 
 export async function listPaymentService({page = 1, sort = null, status = null}): Promise<Payment[]> {
     const res = await axios.get("http://localhost:8080/dashboard/v1/payments", {
@@ -36,7 +37,7 @@ export async function paymentReviewService(id: string): Promise<number> {
     return res.status;
 }
 
-export async function getTotalPaymentService(status: string): Promise<number> {
+export async function getTotalPaymentService(status: string): Promise<PaymentCount> {
     const res = await axios.get("http://localhost:8080/dashboard/v1/payments/size", {
         params: {
             status: status || undefined
@@ -47,7 +48,7 @@ export async function getTotalPaymentService(status: string): Promise<number> {
         }
     });
 
-    return res.data.count;
+    return res.data as PaymentCount;
 }
 
 export function getAuthenticationToken(): string {

@@ -15,9 +15,12 @@ interface PaymentState {
     itemsPerPage: number;
     totalCount: number,
     totalPages: number,
+    processingTotal: number,
+    completedTotal: number,
+    failedTotal: number
 }
 
-export const useDasboardViewModel = defineStore("dashboardStore", {
+export const useDashboardViewModel = defineStore("dashboardStore", {
     state: (): PaymentState => ({
         payments: [],
         page: null,
@@ -30,6 +33,9 @@ export const useDasboardViewModel = defineStore("dashboardStore", {
         itemsPerPage: 10,
         totalCount: 0,
         totalPages: 1,
+        processingTotal: 0,
+        completedTotal: 0,
+        failedTotal: 0
     }),
     getters: {
         filteredPayments: (state) => {
@@ -59,9 +65,13 @@ export const useDasboardViewModel = defineStore("dashboardStore", {
         async fetchTotalCount() {
             this.loading = true;
             try {
-                const count = await getTotalPaymentService(this.status);
-                this.totalCount = count;
-                this.totalPages = Math.ceil(count / this.itemsPerPage) || 1;
+                const res = await getTotalPaymentService(this.status);
+                this.totalCount = res.count;
+                this.totalPages = Math.ceil(res.count / this.itemsPerPage) || 1;
+
+                this.processingTotal = res.processing;
+                this.completedTotal = res.completed;
+                this.failed = res.failed;
             } catch {
                 this.error = "Failed to get total payments count";
             } finally {

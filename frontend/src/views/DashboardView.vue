@@ -24,7 +24,7 @@
             </div>
 
             <div class="pagination-controls">
-                <label>Page</label>
+                <label>Page {{ getPaymentSummary() }}</label>
                 <div class="pagination">
                 <template v-for="page in viewModel.totalPagesArray" :key="page">
                     <button
@@ -79,12 +79,12 @@
     import { onMounted } from "vue";
     import { useRouter } from "vue-router";
     import { checkAuthentication, getRole } from "../view-models/DashboardViewModel";
-    import { useDasboardViewModel } from "../view-models/DashboardViewModel";
+    import { useDashboardViewModel } from "../view-models/DashboardViewModel";
     import ListView from "../components/ListView.vue";
     import EditField from "../components/EditField.vue";
     import { Payment } from "../models/Payment";
 
-    const viewModel = useDasboardViewModel();
+    const viewModel = useDashboardViewModel();
     const router = useRouter();
 
     viewModel.page = viewModel.page || 1;
@@ -115,6 +115,10 @@
         viewModel.logout()
         router.push("/login");
     };
+
+    const getPaymentSummary = () => {
+        return `(Total : ${viewModel.totalCount} | Completed : ${viewModel.completedTotal} | Processing : ${viewModel.processingTotal} | Failed : ${viewModel.failedTotal})`;
+    }
 </script>
   
 <style scoped>
