@@ -43,6 +43,12 @@ Recommendation running all command Terminal use **GoLand IDE**
   5. **make test** : for running all tests
 
 
+- **Free port 8080**
+    1. open Terminal
+    2. lsof -i :8080
+    3. kill <PID>
+  
+
 - **Step Running Server**
     1. make sure port 8080 dont use
     2. open target directory to **/backend** on Terminal
@@ -102,12 +108,6 @@ Recommendation running all command Terminal use **VS Code**
     2. open target directory to **/frontend** on Terminal
     3. run **make install**
     4. run **make run dev**
-
-
-- **Free port 8080**
-  1. open Terminal
-  2. lsof -i :8080
-  3. kill <PID>
 
 
 - **Credentials**
