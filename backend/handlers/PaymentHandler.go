@@ -5,6 +5,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"net/http"
 	"strconv"
+	"strings"
 )
 
 func ListPaymentHandler(paymentData *services.PaymentData) echo.HandlerFunc {
@@ -34,17 +35,38 @@ func ListPaymentHandler(paymentData *services.PaymentData) echo.HandlerFunc {
 
 func GetTotalPaymentsHandler(paymentData *services.PaymentData) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		payments := paymentData.ListPayments()
-
-		// filter status
-		status := c.QueryParam("status")
-		if status != "" {
-			payments = services.PaymentsFiltered(status, payments)
+		allPayments := paymentData.ListPayments()
+		totalStatusCounts := map[string]int{
+			"processing": 0,
+			"completed":  0,
+			"failed":     0,
 		}
-		
-		return c.JSON(http.StatusOK, map[string]interface{}{
-			"count": len(payments),
-		})
+		for _, p := range allPayments {
+			status := strings.ToLower(string(p.Status))
+			switch status {
+			case "processing":
+				totalStatusCounts["processing"]++
+			case "completed":
+				totalStatusCounts["completed"]++
+			case "failed":
+				totalStatusCounts["failed"]++
+			}
+		}
+
+		filterStatus := c.QueryParam("status")
+		filteredPayments := allPayments
+		if filterStatus != "" {
+			filteredPayments = services.PaymentsFiltered(filterStatus, allPayments)
+		}
+
+		response := map[string]int{
+			"count":      len(filteredPayments),
+			"processing": totalStatusCounts["processing"],
+			"completed":  totalStatusCounts["completed"],
+			"failed":     totalStatusCounts["failed"],
+		}
+
+		return c.JSON(http.StatusOK, response)
 	}
 }
 
