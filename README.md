@@ -46,7 +46,7 @@ Recommendation running all command Terminal use **GoLand IDE**
 - **Free port 8080**
     1. open Terminal
     2. lsof -i :8080
-    3. kill <PID>
+    3. kill `<PID>`
   
 
 - **Step Running Server**
