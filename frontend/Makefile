@@ -16,6 +16,7 @@ help:
 	@echo "  make run-dev      - Run dev server"
 	@echo "  make build        - Build project for production"
 	@echo "  make lint         - Run linter"
+	@echo "  make test         - Run unit/functional tests"
 	@echo "  make clean        - Clean dist folder"
 
 # Install dependencies
@@ -40,6 +41,11 @@ build:
 .PHONY: lint
 lint:
 	$(VUE_CLI_SERVICE) lint
+
+# Run tests
+.PHONY: test
+test:
+	$(NPM) run test:unit
 
 # Clean build
 .PHONY: clean
